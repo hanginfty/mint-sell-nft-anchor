@@ -1,5 +1,6 @@
 import * as anchor from "@project-serum/anchor";
 import { MintNft } from "../target/types/mint_nft";
+// import testNftUri from "./test.json";
 
 describe("nft-marketplace", async () => {
   const testNftTitle = "Beta";
