@@ -1,16 +1,23 @@
 import * as anchor from "@project-serum/anchor";
+// ** Comment this to use solpg imported IDL **
 import { MintNft } from "../target/types/mint_nft";
-// import testNftUri from "./test.json";
 
 describe("nft-marketplace", async () => {
   const testNftTitle = "Beta";
   const testNftSymbol = "BETA";
-  const testNftUri = "./test.json";
+  const testNftUri =
+    "https://raw.githubusercontent.com/Coding-and-Crypto/Solana-NFT-Marketplace/master/assets/example.json";
 
   const provider = anchor.AnchorProvider.env();
   const wallet = provider.wallet as anchor.Wallet;
   anchor.setProvider(provider);
 
+  // ** Un-comment this to use solpg imported IDL **
+  // const program = new anchor.Program(
+  //   require("../solpg/idl.json"),
+  //   new anchor.web3.PublicKey("H2UJjAQTuVJYhaBhh6GD2KaprLBTp1vhP2aaHioya5NM"),
+  // );
+  // ** Comment this to use solpg imported IDL **
   const program = anchor.workspace.MintNft as anchor.Program<MintNft>;
 
   const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
@@ -19,6 +26,7 @@ describe("nft-marketplace", async () => {
 
   it("Mint!", async () => {
     // Derive the mint address and the associated token account address
+
     const mintKeypair: anchor.web3.Keypair = anchor.web3.Keypair.generate();
     const tokenAddress = await anchor.utils.token.associatedAddress({
       mint: mintKeypair.publicKey,
@@ -27,6 +35,7 @@ describe("nft-marketplace", async () => {
     console.log(`New token: ${mintKeypair.publicKey}`);
 
     // Derive the metadata and master edition addresses
+
     const metadataAddress = (
       await anchor.web3.PublicKey.findProgramAddress(
         [
@@ -52,6 +61,7 @@ describe("nft-marketplace", async () => {
     console.log("Master edition metadata initialized");
 
     // Transact with the "mint" function in our on-chain program
+
     await program.methods
       .mint(testNftTitle, testNftSymbol, testNftUri)
       .accounts({
